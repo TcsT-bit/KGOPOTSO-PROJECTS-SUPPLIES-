@@ -230,15 +230,16 @@ import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from
 import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js';
 const { jsPDF } = window.jspdf;
 
+// UPDATED FIREBASE CONFIG - kpsbiz-fb686
 const firebaseConfig = {
-  apiKey: "AIzaSyBwZlhYw5jJ1GtzwhmWnk2JC07MpUp1Xpk",
-  authDomain: "kps-projects-supplies.firebaseapp.com",
-  databaseURL: "https://kps-projects-supplies-default-rtdb.firebaseio.com",
-  projectId: "kps-projects-supplies",
-  storageBucket: "kps-projects-supplies.firebasestorage.app",
-  messagingSenderId: "42102797679",
-  appId: "1:42102797679:web:86a26f7502cd43807ce49a",
-  measurementId: "G-BVT23ZWTPD"
+  apiKey: "AIzaSyCQ1WM9__gC75RcVifrbaSOnsfAbUwpH20",
+  authDomain: "kpsbiz-fb686.firebaseapp.com",
+  databaseURL: "https://kpsbiz-fb686-default-rtdb.firebaseio.com",
+  projectId: "kpsbiz-fb686",
+  storageBucket: "kpsbiz-fb686.firebasestorage.app",
+  messagingSenderId: "185507705947",
+  appId: "1:185507705947:web:2c82a1b6570ff6f4027b7e",
+  measurementId: "G-HDLHG9R73N"
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -546,7 +547,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.updateStock = (id) => { let add = parseInt(document.getElementById('stock_'+id).value); set(ref(db, 'kps/categories/' + id + '/stock'), (products[id].stock||0) + add); document.getElementById('stock_'+id).value = 0; }
 
   window.addToCart = (id) => { let p = products[id]; let item = cart.find(x=>x.id==id); if(item){ item.qty++ } else { cart.push({id,name:p.name,price:p.price,qty:1,category:p.category}) } updateCart(); renderProducts(); renderClientProducts(); }
-  window.decreaseQty = (id) => { let item = cart.find(x=>x.id==id); if(item){ item.qty--; if(item.qty <= 0){ cart = cart.filter(x=>x.id!=id); } } updateCart(); renderProducts(); renderClientProducts(); }
+  window.decreaseQty = (id) => { let item = cart.find(x=>x.id==id); if(item){ item.qty--; if(item.qty <= 0){ cart = cart.filter(x=>x.id!=id); } updateCart(); renderProducts(); renderClientProducts(); }
 
   function updateCart(){
     cartBar.style.display = cart.length?'block':'none'; clientCartBar.style.display = cart.length?'block':'none';

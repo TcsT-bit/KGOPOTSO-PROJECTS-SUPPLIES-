@@ -106,8 +106,13 @@ input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid var(
     <div class="client-link"><b>📲 Share this with clients:</b><br><code id="clientLink"></code></div>
     <div class="banner">🎓 GET ACCEPTED WITH US!!! 🎓</div>
     <div class="nav-cats">
-      <button onclick="filterCat('All', event)">All</button><button onclick="filterCat('University', event)">University</button>
-      <button onclick="filterCat('TVET College', event)">TVET College</button><button onclick="filterCat('NSFAS & Bursaries', event)">NSFAS & Bursaries</button>
+      <button onclick="filterCat('All', event)">All</button>
+      <button onclick="filterCat('University', event)">University</button>
+      <button onclick="filterCat('TVET College', event)">TVET College</button>
+      <button onclick="filterCat('NSFAS & Bursaries', event)">NSFAS & Bursaries</button>
+      <button onclick="filterCat('Computer Training', event)">Computer Training</button>
+      <button onclick="filterCat('Internet Cafe', event)">Internet Cafe</button>
+      <button onclick="filterCat('Food & Snacks', event)">Food & Snacks</button>
     </div>
     <h2 style="margin:20px 0">📋 Our Services</h2>
     <div class="grid" id="clientProductGrid"><div class="loading">Loading services...</div></div>
@@ -148,8 +153,13 @@ input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid var(
       </div>
     </div>
     <div class="nav-cats">
-      <button onclick="filterCat('All', event)">All</button><button onclick="filterCat('University', event)">University</button>
-      <button onclick="filterCat('TVET College', event)">TVET College</button><button onclick="filterCat('NSFAS & Bursaries', event)">NSFAS & Bursaries</button>
+      <button onclick="filterCat('All', event)">All</button>
+      <button onclick="filterCat('University', event)">University</button>
+      <button onclick="filterCat('TVET College', event)">TVET College</button>
+      <button onclick="filterCat('NSFAS & Bursaries', event)">NSFAS & Bursaries</button>
+      <button onclick="filterCat('Computer Training', event)">Computer Training</button>
+      <button onclick="filterCat('Internet Cafe', event)">Internet Cafe</button>
+      <button onclick="filterCat('Food & Snacks', event)">Food & Snacks</button>
     </div>
   </div>
   <div class="container">
@@ -187,7 +197,10 @@ input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid var(
         <h3 id="formTitle">➕ Add Service</h3>
         <button class="btn-purple" onclick="seedDatabase()">⚡ Add Default Services</button>
         <input type="text" id="pName" placeholder="Service Name">
-        <select id="pCat"><option>University</option><option>TVET College</option><option>NSFAS & Bursaries</option></select>
+        <select id="pCat">
+          <option>University</option><option>TVET College</option><option>NSFAS & Bursaries</option>
+          <option>Computer Training</option><option>Internet Cafe</option><option>Food & Snacks</option>
+        </select>
         <input type="text" id="pImg" placeholder="Image URL 1, Image URL 2">
         <input type="number" id="pPrice" placeholder="Price R">
         <input type="number" id="pOldPrice" placeholder="Old Price R">
@@ -259,12 +272,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('installBanner').style.display = 'block';
   });
   setTimeout(()=>{ if(!deferredPrompt) document.getElementById('installBanner').style.display = 'block'; }, 3000);
-  
+
   document.getElementById('installBtn').onclick = () => {
     if(deferredPrompt){
       deferredPrompt.prompt();
-      deferredPrompt.userChoice.then(() => { 
-        deferredPrompt = null; 
+      deferredPrompt.userChoice.then(() => {
+        deferredPrompt = null;
         document.getElementById('installBanner').style.display = 'none';
       });
     } else {
@@ -305,14 +318,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const loginError = document.getElementById('loginError');
 
   if(adminSearch) adminSearch.addEventListener('keyup', buildProductList);
-  window.doLogin = async () => { 
-    loginError.innerText = 'Logging in...'; 
-    try{ 
-      await signInWithEmailAndPassword(auth, loginEmail.value, loginPass.value); 
+  window.doLogin = async () => {
+    loginError.innerText = 'Logging in...';
+    try{
+      await signInWithEmailAndPassword(auth, loginEmail.value, loginPass.value);
       loginError.innerText = '';
-    } catch(e){ 
-      loginError.innerText = 'Login failed: ' + e.message 
-    } 
+    } catch(e){
+      loginError.innerText = 'Login failed: ' + e.message
+    }
   }
   window.logout = () => { signOut(auth) }
 
@@ -354,7 +367,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function getImages(p){ if(!p.img) return ['https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg']; return p.img.split(',').map(s=>s.trim()).filter(s=>s); }
-  window.switchImage = (cardId, imgUrl, thumb) => { document.getElementById('main_'+cardId).src = imgUrl; document.querySelectorAll(`#card_${cardId} .card-imgs img`).forEach(i=>i.classList.remove('active')); thumb.classList.add('active'); }
+  window.switchImage = (cardId, imgUrl, thumb) => { document.getElementById('main_'+cardId).src = imgUrl; document.querySelectorAll(`#card_${cardId}.card-imgs img`).forEach(i=>i.classList.remove('active')); thumb.classList.add('active'); }
 
   function getCartControls(id){
     let item = cart.find(x=>x.id==id);
@@ -545,10 +558,27 @@ document.addEventListener('DOMContentLoaded', () => {
       {name:"TVET College Application - 1 College", category:"TVET College", price:50, stock:999, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"1 TVET College"},
       {name:"TVET College Application - Combo 4", category:"TVET College", price:175, stock:999, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"4 TVET Colleges"},
       {name:"NSFAS Application Assistance", category:"NSFAS & Bursaries", price:100, stock:999, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Full NSFAS Support"},
-      {name:"Bursary Application Assistance", category:"NSFAS & Bursaries", price:120, stock:999, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Multiple Bursaries"}
+      {name:"Bursary Application Assistance", category:"NSFAS & Bursaries", price:120, stock:999, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Multiple Bursaries"},
+      {name:"Computer Training - Block 1", category:"Computer Training", price:450, stock:50, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Computer Fundamentals"},
+      {name:"Computer Training - Block 2", category:"Computer Training", price:450, stock:50, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Microsoft Word"},
+      {name:"Computer Training - Block 3", category:"Computer Training", price:450, stock:50, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Microsoft Excel"},
+      {name:"Computer Training - Block 4", category:"Computer Training", price:450, stock:50, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Microsoft PowerPoint"},
+      {name:"Computer Training - Block 5", category:"Computer Training", price:450, stock:50, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Microsoft Access"},
+      {name:"Computer Training - Block 6", category:"Computer Training", price:450, stock:50, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Microsoft Publisher"},
+      {name:"Computer Training - Block 7", category:"Computer Training", price:450, stock:50, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Microsoft Outlook"},
+      {name:"Printing - A4 Black & White", category:"Internet Cafe", price:3, stock:9999, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Per Page"},
+      {name:"Printing - A4 Color", category:"Internet Cafe", price:8, stock:9999, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Per Page"},
+      {name:"Typing & CV Writing", category:"Internet Cafe", price:80, stock:999, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Per Document"},
+      {name:"Business Registration - CIPC", category:"Internet Cafe", price:250, stock:999, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Company Registration"},
+      {name:"Branding & Design", category:"Internet Cafe", price:150, stock:999, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Logos, Flyers"},
+      {name:"Door-to-door Services", category:"Internet Cafe", price:50, stock:999, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Delivery Fee"},
+      {name:"Popcorn - Small", category:"Food & Snacks", price:15, stock:200, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Small Tub"},
+      {name:"Popcorn - Large", category:"Food & Snacks", price:25, stock:200, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Large Tub"},
+      {name:"Snacks & Sweets", category:"Food & Snacks", price:10, stock:500, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Chips, Chocolates"},
+      {name:"Soft Drinks", category:"Food & Snacks", price:12, stock:500, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"330ml Can"}
     ];
     defaultData.forEach(p=>{ let id = Date.now().toString() + Math.random(); set(ref(db, 'kpsbiz/categories/' + id), p); });
-    alert('6 Default services added to Firebase!')
+    alert('All Default services added to Firebase!')
   }
 
   window.deleteProduct = (id) => { if(currentUser.role!= 'ceo') return alert('CEO only'); if(confirm('Delete this service?')) remove(ref(db, 'kpsbiz/categories/' + id)) }

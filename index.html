@@ -18,9 +18,12 @@ html, body{overflow-x:hidden; width:100%}
 .search-box input{border:none;outline:none;width:100%;background:transparent;color:#000}
 .nav-cats{display:flex;gap:15px;overflow-x:auto;margin-top:10px;padding-bottom:5px;padding-right:15px}
 .nav-cats button{background:rgba(255,255,255,0.2);border:none;color:#fff;padding:6px 12px;border-radius:20px;font-weight:600;cursor:pointer;white-space:nowrap}
-#clientView.nav-cats button{background:#fff!important;color:#000!important;border:1px solid #ccc!important;opacity:1!important;}
-#clientView.nav-cats button:hover{background:var(--accent)!important;color:#fff!important;}
-#clientView.nav-cats button.active{background:var(--accent)!important;color:#fff!important;border-bottom:2px solid #000!important;font-weight:700!important;}
+
+/* FIXED: Client nav buttons now black text on white */
+#clientView .nav-cats button{background:#fff!important;color:#2d3436!important;border:1px solid #dfe6e9!important;opacity:1!important;font-weight:600!important;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
+#clientView .nav-cats button:hover{background:var(--accent)!important;color:#fff!important;transform:translateY(-1px)}
+#clientView .nav-cats button.active{background:var(--accent)!important;color:#fff!important;border:1px solid var(--accent)!important;border-bottom:3px solid #000!important;font-weight:800!important;box-shadow:0 2px 6px rgba(211,1,49,0.3)}
+
 .container{max-width:100%;margin:0 auto;padding:10px}
 .banner{background:linear-gradient(135deg,#004080,#d30131);color:#fff;padding:20px;border-radius:15px;text-align:center;margin:15px 0;font-weight:800;font-size:18px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
@@ -378,7 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return `<div class="qty-controls"><button class="qty-btn" onclick="decreaseQty('${id}')">-</button><div class="qty-text">${item.qty}</div><button class="qty-btn" onclick="addToCart('${id}')">+</button></div>`;
   }
 
-  function renderProducts(){
+ function renderProducts(){
     productGrid.innerHTML = '';
     if(Object.keys(products).length === 0){ productGrid.innerHTML = `<p style="text-align:center;grid-column:1/-1">No services yet</p>`; return; }
     Object.entries(products).filter(([id,p])=>{ let matchCat = currentFilter =='All' || p.category == currentFilter; let matchSearch = p.name.toLowerCase().includes(searchInput.value.toLowerCase()); return matchCat && matchSearch; }).forEach(([id,p])=>{

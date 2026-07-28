@@ -113,6 +113,7 @@ input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid var(
       <button onclick="filterCat('Computer Training', event)">Computer Training</button>
       <button onclick="filterCat('Internet Cafe', event)">Internet Cafe</button>
       <button onclick="filterCat('Food & Snacks', event)">Food & Snacks</button>
+      <button onclick="filterCat('Driving School', event)">Driving School</button>
     </div>
     <h2 style="margin:20px 0">📋 Our Services</h2>
     <div class="grid" id="clientProductGrid"><div class="loading">Loading services...</div></div>
@@ -160,6 +161,7 @@ input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid var(
       <button onclick="filterCat('Computer Training', event)">Computer Training</button>
       <button onclick="filterCat('Internet Cafe', event)">Internet Cafe</button>
       <button onclick="filterCat('Food & Snacks', event)">Food & Snacks</button>
+      <button onclick="filterCat('Driving School', event)">Driving School</button>
     </div>
   </div>
   <div class="container">
@@ -200,6 +202,7 @@ input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid var(
         <select id="pCat">
           <option>University</option><option>TVET College</option><option>NSFAS & Bursaries</option>
           <option>Computer Training</option><option>Internet Cafe</option><option>Food & Snacks</option>
+          <option>Driving School</option>
         </select>
         <input type="text" id="pImg" placeholder="Image URL 1, Image URL 2">
         <input type="number" id="pPrice" placeholder="Price R">
@@ -367,7 +370,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function getImages(p){ if(!p.img) return ['https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg']; return p.img.split(',').map(s=>s.trim()).filter(s=>s); }
-  window.switchImage = (cardId, imgUrl, thumb) => { document.getElementById('main_'+cardId).src = imgUrl; document.querySelectorAll(`#card_${cardId}.card-imgs img`).forEach(i=>i.classList.remove('active')); thumb.classList.add('active'); }
+  window.switchImage = (cardId, imgUrl, thumb) => { document.getElementById('main_'+cardId).src = imgUrl; document.querySelectorAll(`#card_${cardId} .card-imgs img`).forEach(i=>i.classList.remove('active')); thumb.classList.add('active'); }
 
   function getCartControls(id){
     let item = cart.find(x=>x.id==id);
@@ -575,7 +578,15 @@ document.addEventListener('DOMContentLoaded', () => {
       {name:"Popcorn - Small", category:"Food & Snacks", price:15, stock:200, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Small Tub"},
       {name:"Popcorn - Large", category:"Food & Snacks", price:25, stock:200, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Large Tub"},
       {name:"Snacks & Sweets", category:"Food & Snacks", price:10, stock:500, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Chips, Chocolates"},
-      {name:"Soft Drinks", category:"Food & Snacks", price:12, stock:500, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"330ml Can"}
+      {name:"Soft Drinks", category:"Food & Snacks", price:12, stock:500, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"330ml Can"},
+      {name:"Code 8 Learner License Training", category:"Driving School", price:650, stock:100, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Study material + Mock tests"},
+      {name:"Code 8 Package - 10 Lessons", category:"Driving School", price:3500, stock:50, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Manual Car + Test Booking"},
+      {name:"Code 8 Package - 15 Lessons", category:"Driving School", price:4500, stock:50, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Manual Car + Test Booking"},
+      {name:"Code 10 Truck Lessons - 10x", category:"Driving School", price:8500, stock:20, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Medium Truck Training"},
+      {name:"Code 14 Truck+Trailer - 10x", category:"Driving School", price:12000, stock:20, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Heavy Vehicle Training"},
+      {name:"PDP Application Assistance", category:"Driving School", price:600, stock:999, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Professional Driving Permit"},
+      {name:"Single Driving Lesson - 45min", category:"Driving School", price:280, stock:999, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Pay per lesson"},
+      {name:"Test Booking Assistance", category:"Driving School", price:200, stock:999, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Yard + Road Test Booking"}
     ];
     defaultData.forEach(p=>{ let id = Date.now().toString() + Math.random(); set(ref(db, 'kpsbiz/categories/' + id), p); });
     alert('All Default services added to Firebase!')

@@ -116,7 +116,6 @@ input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid var(
       <button onclick="filterCat('Computer Training', event)">Computer Training</button>
       <button onclick="filterCat('Internet Cafe', event)">Internet Cafe</button>
       <button onclick="filterCat('Food & Snacks', event)">Food & Snacks</button>
-      <button onclick="filterCat('Driving School', event)">Driving School</button>
     </div>
     <h2 style="margin:20px 0">📋 Our Services</h2>
     <div class="grid" id="clientProductGrid"><div class="loading">Loading services...</div></div>
@@ -164,7 +163,6 @@ input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid var(
       <button onclick="filterCat('Computer Training', event)">Computer Training</button>
       <button onclick="filterCat('Internet Cafe', event)">Internet Cafe</button>
       <button onclick="filterCat('Food & Snacks', event)">Food & Snacks</button>
-      <button onclick="filterCat('Driving School', event)">Driving School</button>
     </div>
   </div>
   <div class="container">
@@ -205,7 +203,6 @@ input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid var(
         <select id="pCat">
           <option>University</option><option>TVET College</option><option>NSFAS & Bursaries</option>
           <option>Computer Training</option><option>Internet Cafe</option><option>Food & Snacks</option>
-          <option>Driving School</option>
         </select>
         <input type="text" id="pImg" placeholder="Image URL 1, Image URL 2">
         <input type="number" id="pPrice" placeholder="Price R">
@@ -381,19 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return `<div class="qty-controls"><button class="qty-btn" onclick="decreaseQty('${id}')">-</button><div class="qty-text">${item.qty}</div><button class="qty-btn" onclick="addToCart('${id}')">+</button></div>`;
   }
 
- function renderProducts(){
-    productGrid.innerHTML = '';
-    if(Object.keys(products).length === 0){ productGrid.innerHTML = `<p style="text-align:center;grid-column:1/-1">No services yet</p>`; return; }
-    Object.entries(products).filter(([id,p])=>{ let matchCat = currentFilter =='All' || p.category == currentFilter; let matchSearch = p.name.toLowerCase().includes(searchInput.value.toLowerCase()); return matchCat && matchSearch; }).forEach(([id,p])=>{
-      let imgs = getImages(p); let mainImg = imgs[0];
-      let extraImgs = imgs.map((u,i)=>`<img src="${u}" class="${i==0?'active':''}" onclick="switchImage('${id}','${u}',this)" onerror="this.style.display='none'">`).join('');
-      let brands = p.desc? p.desc.split(',').map(b=>`<span class="brand-tag">${b}</span>`).join('') : '';
-      let cartBtn = p.stock >0? getCartControls(id) : `<button class="btn-oos" disabled>Fully Booked</button>`;
-      productGrid.innerHTML += `<div class="card" id="card_${id}"><img id="main_${id}" src="${mainImg}" loading="lazy" onerror="this.onerror=null;this.src='https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg'"><div class="card-imgs">${extraImgs}</div><h4>${p.name}</h4>${brands}<div class="price">R${p.price} ${p.oldPrice? `<span class="old-price">R${p.oldPrice}</span>`:''}</div><div class="stock ${p.stock<10?'stock-low':''}">Capacity: ${p.stock}</div>${cartBtn}</div>`;
-    })
-  }
-
-  function renderClientProducts(){
+ function renderClientProducts(){
     if(!isClientMode) return;
     clientProductGrid.innerHTML = '';
     if(Object.keys(products).length === 0){ clientProductGrid.innerHTML = `<p style="text-align:center;grid-column:1/-1">No services yet</p>`; return; }
@@ -581,15 +566,7 @@ document.addEventListener('DOMContentLoaded', () => {
       {name:"Popcorn - Small", category:"Food & Snacks", price:15, stock:200, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Small Tub"},
       {name:"Popcorn - Large", category:"Food & Snacks", price:25, stock:200, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Large Tub"},
       {name:"Snacks & Sweets", category:"Food & Snacks", price:10, stock:500, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Chips, Chocolates"},
-      {name:"Soft Drinks", category:"Food & Snacks", price:12, stock:500, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"330ml Can"},
-      {name:"Code 8 Learner License Training", category:"Driving School", price:650, stock:100, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Study material + Mock tests"},
-      {name:"Code 8 Package - 10 Lessons", category:"Driving School", price:3500, stock:50, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Manual Car + Test Booking"},
-      {name:"Code 8 Package - 15 Lessons", category:"Driving School", price:4500, stock:50, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Manual Car + Test Booking"},
-      {name:"Code 10 Truck Lessons - 10x", category:"Driving School", price:8500, stock:20, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Medium Truck Training"},
-      {name:"Code 14 Truck+Trailer - 10x", category:"Driving School", price:12000, stock:20, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Heavy Vehicle Training"},
-      {name:"PDP Application Assistance", category:"Driving School", price:600, stock:999, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Professional Driving Permit"},
-      {name:"Single Driving Lesson - 45min", category:"Driving School", price:280, stock:999, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Pay per lesson"},
-      {name:"Test Booking Assistance", category:"Driving School", price:200, stock:999, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Yard + Road Test Booking"}
+      {name:"Soft Drinks", category:"Food & Snacks", price:12, stock:500, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"330ml Can"}
     ];
     defaultData.forEach(p=>{ let id = Date.now().toString() + Math.random(); set(ref(db, 'kpsbiz/categories/' + id), p); });
     alert('All Default services added to Firebase!')

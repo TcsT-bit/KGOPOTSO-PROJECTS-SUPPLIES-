@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KGOPOTSO PROJECTS & SUPPLIES | GET ACCEPTED WITH US!!!</title>
-<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiS2dvcG90c28gUHJvamVjdHMgJiBTdXBwbGllcyIsInNob3J0X25hbWUiOiJLUFMiLCAic3RhcnRfdXJsIjoiIiwgImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMwMDQwODAiLCJ0aGVtZV9jb2xvciI6IiNkMzAxMzEiLCJpY29ucyI6W3sic3JjIjoiaHR0cHM6Ly9pLmViYi5jby82Y0ozejhwZy9JTUctMjAyNjA2MTdXQTAwMDMuanBnIiwic2l6ZXMiOiI1MTJ4NTEyIiwidHlwZSI6ImltYWdlL2pwZWcifV19">
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiS2dvcG90c28gUHJvamVjdHMgJiBTdXBwbGllcyIsInNob3J0X25hbWUiOiJLUFMiLCAic3RhcnRfdXJsIjoiIiwgImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMwMDQwODAiLCJ0aGVtZV9jb2xvciI6IiNkMzAxMzEiLCJpY29ucyI6W3sic3JjIjoiaHR0cHM6Ly9pLmViYi5jby81Z3lZelJDMy9TY3JlZW5zaG90LTIwMjYwODAzLTE4MTkyOC1jb20td2hhdHNhcHAppi1lZGl0LTk3Nzg2NjM5NjcyNjQyLmpwZyIsInNpemVzIjoiNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9qcGVnIn1dfQ==">
 <meta name="theme-color" content="#004080">
-<link rel="apple-touch-icon" href="https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg">
+<link rel="apple-touch-icon" href="https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
@@ -101,7 +101,7 @@ input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid var(
 
 <div id="clientView" style="display:none">
   <div class="client-header">
-    <img src="https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg" class="logo" style="margin:0 auto">
+    <img src="https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg" class="logo" style="margin:0 auto">
     <h2>KGOPOTSO PROJECTS & SUPPLIES</h2>
     <div class="search-box" style="max-width:500px;margin:10px auto"><input type="text" id="clientSearchInput" placeholder="Search services..." onkeyup="searchProducts()"></div>
   </div>
@@ -136,7 +136,7 @@ input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid var(
 
 <div id="loginScreen">
   <div class="login-box">
-    <img src="https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg" style="width:80px;margin:0 auto;display:block;border-radius:15px">
+    <img src="https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg" style="width:80px;margin:0 auto;display:block;border-radius:15px">
     <h2>KPS BIZPORTAL</h2>
     <div id="loginError" class="error"></div>
     <input type="email" id="loginEmail" placeholder="Email">
@@ -148,7 +148,7 @@ input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid var(
 <div id="app" style="display:none">
   <div class="header">
     <div class="header-top">
-      <img src="https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg" class="logo">
+      <img src="https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg" class="logo">
       <div class="search-box"><input type="text" id="searchInput" placeholder="Search services..." onkeyup="searchProducts()"></div>
       <div style="display:flex;gap:8px;align-items:center">
         <button class="btn" style="padding:5px 10px;font-size:12px;background:#fff;color:var(--blue)" onclick="toggleDark()">🌙</button>
@@ -369,7 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if(lowStockList.innerHTML=='') lowStockList.innerHTML = '<p style="color:var(--green)">All service capacity good ✅</p>'
   }
 
-  function getImages(p){ if(!p.img) return ['https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg']; return p.img.split(',').map(s=>s.trim()).filter(s=>s); }
+  function getImages(p){ if(!p.img) return ['https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg']; return p.img.split(',').map(s=>s.trim()).filter(s=>s); }
   window.switchImage = (cardId, imgUrl, thumb) => { document.getElementById('main_'+cardId).src = imgUrl; document.querySelectorAll(`#card_${cardId} .card-imgs img`).forEach(i=>i.classList.remove('active')); thumb.classList.add('active'); }
 
   function getCartControls(id){
@@ -382,12 +382,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if(!isClientMode) return;
     clientProductGrid.innerHTML = '';
     if(Object.keys(products).length === 0){ clientProductGrid.innerHTML = `<p style="text-align:center;grid-column:1/-1">No services yet</p>`; return; }
-    Object.entries(products).filter(([id,p])=>{ let matchCat = currentFilter == 'All' || p.category == currentFilter; let matchSearch = p.name.toLowerCase().includes(clientSearchInput.value.toLowerCase()); return matchCat && matchSearch; }).forEach(([id,p])=>{
-      let imgs = getImages(p); let mainImg = imgs[0];
+    Object.entries(products).filter(([id,p])=>{
+      let matchCat = currentFilter == 'All' || p.category == currentFilter;
+      let matchSearch = p.name.toLowerCase().includes(clientSearchInput.value.toLowerCase());
+      return matchCat && matchSearch;
+    }).forEach(([id,p])=>{
+      let imgs = getImages(p);
+      let mainImg = imgs[0];
       let extraImgs = imgs.map((u,i)=>`<img src="${u}" class="${i==0?'active':''}" onclick="switchImage('${id}','${u}',this)" onerror="this.style.display='none'">`).join('');
       let brands = p.desc? p.desc.split(',').map(b=>`<span class="brand-tag">${b}</span>`).join('') : '';
       let cartBtn = p.stock > 0? getCartControls(id) : `<button class="btn-oos" disabled>Fully Booked</button>`;
-      clientProductGrid.innerHTML += `<div class="card" id="card_${id}"><img id="main_${id}" src="${mainImg}" loading="lazy" onerror="this.onerror=null;this.src='https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg'"><div class="card-imgs">${extraImgs}</div><h4>${p.name}</h4>${brands}<div class="price">R${p.price} ${p.oldPrice? `<span class="old-price">R${p.oldPrice}</span>`:''}</div>${cartBtn}</div>`;
+      clientProductGrid.innerHTML += `<div class="card" id="card_${id}"><img id="main_${id}" src="${mainImg}" loading="lazy" onerror="this.onerror=null;this.src='https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg'"><div class="card-imgs">${extraImgs}</div><h4>${p.name}</h4>${brands}<div class="price">R${p.price} ${p.oldPrice? `<span class="old-price">R${p.oldPrice}</span>`:''}</div>${cartBtn}</div>`;
     })
   }
 
@@ -404,7 +409,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if(currentUser.role == 'reception') return;
     productList.innerHTML = '';
     let searchTerm = adminSearch.value.toLowerCase();
-    Object.entries(products).filter(([id,p])=>{ return p.name.toLowerCase().includes(searchTerm) || p.category.toLowerCase().includes(searchTerm) }).forEach(([id,p])=>{
+    Object.entries(products).filter(([id,p])=>{
+      return p.name.toLowerCase().includes(searchTerm) || p.category.toLowerCase().includes(searchTerm)
+    }).forEach(([id,p])=>{
       productList.innerHTML += `<div style="padding:10px;border:1px solid var(--border);border-radius:8px;margin:5px 0;background:#fafafa"><b>${p.name}</b> - R${p.price} - Capacity: ${p.stock} - <small>${p.category}</small><div style="float:right;gap:5px;display:flex"><button onclick="editProduct('${id}')" class="btn-blue" style="padding:5px 10px;font-size:12px">Edit</button>${currentUser.role== 'ceo'? `<button onclick="deleteProduct('${id}')" class="btn-danger" style="padding:5px 10px;font-size:12px">Del</button>` : ''}</div></div>`;
     })
     if(productList.innerHTML === '') productList.innerHTML = '<p style="text-align:center;color:var(--muted)">No services found</p>'
@@ -450,10 +457,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let custPhone = document.getElementById('invCustPhone').value || o.customerPhone || '';
     let custEmail = document.getElementById('invCustEmail').value || o.customerEmail || '';
     let custAddress = document.getElementById('invCustAddress').value || '';
-    let addTax = document.getElementById('invTaxToggle').checked; let isPaid = document.getElementById('invPaidToggle').checked;
-    let subtotal = o.total; let tax = addTax? subtotal * 0.15 : 0; let grandTotal = subtotal + tax;
+    let addTax = document.getElementById('invTaxToggle').checked;
+    let isPaid = document.getElementById('invPaidToggle').checked;
+    let subtotal = o.total;
+    let tax = addTax? subtotal * 0.15 : 0;
+    let grandTotal = subtotal + tax;
     const doc = new jsPDF();
-    doc.addImage('https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg', 'JPEG', 10, 10, 25, 25);
+    doc.addImage('https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg', 'JPEG', 10, 10, 25, 25);
     doc.setFontSize(16); doc.setFont(undefined, 'bold'); doc.text("KGOPOTSO PROJECTS & SUPPLIES", 40, 18);
     doc.setFontSize(9); doc.setFont(undefined, 'normal');
     doc.text("Reg No: 2025/594397/07", 40, 24);
@@ -474,7 +484,8 @@ document.addEventListener('DOMContentLoaded', () => {
     doc.setFont(undefined, 'bold'); doc.setFontSize(12); doc.text("TOTAL:", 145, y); doc.text(`R${grandTotal.toFixed(2)}`, 175, y);
     if(isPaid){ doc.setFontSize(30); doc.setTextColor(0, 184, 148); doc.text("PAID", 80, 150, {angle: -30}); doc.setTextColor(0,0,0); }
     doc.setFontSize(8); doc.setFont(undefined, 'normal'); doc.text("Thank you for choosing KPS - We help you take the right step towards your future!", 105, 280, {align: "center"});
-    doc.save(`KPS-Invoice-${currentInvoiceId.slice(-6)}.pdf`); document.getElementById('invoiceModal').style.display='none';
+    doc.save(`KPS-Invoice-${currentInvoiceId.slice(-6)}.pdf`);
+    document.getElementById('invoiceModal').style.display='none';
   }
 
   window.downloadQuickInvoice = () => {
@@ -513,7 +524,7 @@ document.addEventListener('DOMContentLoaded', () => {
     set(ref(db, 'kpsbiz/requests/' + orderId), order);
 
     const doc = new jsPDF();
-    doc.addImage('https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg', 'JPEG', 10, 10, 25, 25);
+    doc.addImage('https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg', 'JPEG', 10, 10, 25, 25);
     doc.setFontSize(16); doc.setFont(undefined, 'bold'); doc.text("KGOPOTSO PROJECTS & SUPPLIES", 40, 18);
     doc.setFontSize(9); doc.text("Reg No: 2025/594397/07", 40, 24);
     doc.text("063 740 8191 | 076 702 1104 | kgopotsoprojectsmarketing@gmail.com", 40, 29); doc.line(10, 40, 200, 40);
@@ -535,38 +546,90 @@ document.addEventListener('DOMContentLoaded', () => {
     alert('✅ Walk-In Invoice saved! It will now appear in Requests + CSV');
   }
 
-  window.editProduct = (id) => { if(currentUser.role == 'reception') return alert('No permission'); let p = products[id]; editingId = id; pName.value = p.name; pCat.value = p.category; pImg.value = p.img; pPrice.value = p.price; pOldPrice.value = p.oldPrice; pStock.value = p.stock; pDesc.value = p.desc; formTitle.innerText = "✏️ Editing: " + p.name; saveBtn.innerText = "Update Service"; saveBtn.style.background = "var(--blue)"; cancelBtn.style.display = "block"; document.getElementById('tab-products').scrollIntoView(); }
-  window.cancelEdit = () => { editingId = null; [pName,pImg,pPrice,pOldPrice,pStock,pDesc].forEach(i=>i.value=''); formTitle.innerText = "➕ Add Service"; saveBtn.innerText = "Save Service"; saveBtn.style.background = "var(--accent)"; cancelBtn.style.display = "none"; }
-  window.saveProduct = () => { if(currentUser.role == 'reception') return alert('No permission'); let productData = { name: pName.value.trim(), category: pCat.value, img: pImg.value.trim() || 'https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg', price: Number(pPrice.value) || 0, oldPrice: Number(pOldPrice.value) || 0, stock: Number(pStock.value) || 0, desc: pDesc.value.trim() }; if(!productData.name){ return alert('Please enter service name') } if(editingId){ set(ref(db, 'kpsbiz/categories/' + editingId), productData).then(()=>{ alert('Service Updated!'); cancelEdit(); }).catch(err=> alert('Error: ' + err.message)); } else { let id = Date.now().toString(); set(ref(db, 'kpsbiz/categories/' + id), productData).then(()=>{ [pName,pImg,pPrice,pOldPrice,pStock,pDesc].forEach(i=>i.value=''); alert('Service Added!'); }).catch(err=> alert('Error: ' + err.message)); } }
+  window.editProduct = (id) => {
+    if(currentUser.role == 'reception') return alert('No permission');
+    let p = products[id];
+    editingId = id;
+    pName.value = p.name;
+    pCat.value = p.category;
+    pImg.value = p.img;
+    pPrice.value = p.price;
+    pOldPrice.value = p.oldPrice;
+    pStock.value = p.stock;
+    pDesc.value = p.desc;
+    formTitle.innerText = "✏️ Editing: " + p.name;
+    saveBtn.innerText = "Update Service";
+    saveBtn.style.background = "var(--blue)";
+    cancelBtn.style.display = "block";
+    document.getElementById('tab-products').scrollIntoView();
+  }
+  window.cancelEdit = () => {
+    editingId = null;
+    [pName,pImg,pPrice,pOldPrice,pStock,pDesc].forEach(i=>i.value='');
+    formTitle.innerText = "➕ Add Service";
+    saveBtn.innerText = "Save Service";
+    saveBtn.style.background = "var(--accent)";
+    cancelBtn.style.display = "none";
+  }
+  window.saveProduct = () => {
+    if(currentUser.role == 'reception') return alert('No permission');
+    let productData = {
+      name: pName.value.trim(),
+      category: pCat.value,
+      img: pImg.value.trim() || 'https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg',
+      price: Number(pPrice.value) || 0,
+      oldPrice: Number(pOldPrice.value) || 0,
+      stock: Number(pStock.value) || 0,
+      desc: pDesc.value.trim()
+    };
+    if(!productData.name){ return alert('Please enter service name') }
+    if(editingId){
+      set(ref(db, 'kpsbiz/categories/' + editingId), productData).then(()=>{
+        alert('Service Updated!');
+        cancelEdit();
+      }).catch(err=> alert('Error: ' + err.message));
+    } else {
+      let id = Date.now().toString();
+      set(ref(db, 'kpsbiz/categories/' + id), productData).then(()=>{
+        [pName,pImg,pPrice,pOldPrice,pStock,pDesc].forEach(i=>i.value='');
+        alert('Service Added!');
+      }).catch(err=> alert('Error: ' + err.message));
+    }
+  }
 
-  function buildStockList(){ stockList.innerHTML = ''; Object.entries(products).forEach(([id,p])=>{ stockList.innerHTML += `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px;border:1px solid var(--border);border-radius:8px;margin:5px 0"><div><b>${p.name}</b><br><small class="${p.stock<10?'stock-low':''}">Capacity: ${p.stock}</small></div><div><input type="number" id="stock_${id}" value="0" style="width:80px"><button class="btn-green" onclick="updateStock('${id}')">+ Add</button></div></div>`; }) }
+  function buildStockList(){
+    stockList.innerHTML = '';
+    Object.entries(products).forEach(([id,p])=>{
+      stockList.innerHTML += `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px;border:1px solid var(--border);border-radius:8px;margin:5px 0"><div><b>${p.name}</b><br><small class="${p.stock<10?'stock-low':''}">Capacity: ${p.stock}</small></div><div><input type="number" id="stock_${id}" value="0" style="width:80px"><button class="btn-green" onclick="updateStock('${id}')">+ Add</button></div></div>`;
+    })
+  }
 
   window.seedDatabase = () => {
     if(currentUser.role!= 'ceo' && currentUser.role!= 'manager') return alert('No permission');
     const defaultData = [
-      {name:"University Application - 1 Institution", category:"University", price:80, stock:999, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"1 University"},
-      {name:"University Application - Combo 4", category:"University", price:240, stock:999, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"4 Universities"},
-      {name:"TVET College Application - 1 College", category:"TVET College", price:50, stock:999, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"1 TVET College"},
-      {name:"TVET College Application - Combo 4", category:"TVET College", price:175, stock:999, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"4 TVET Colleges"},
-      {name:"NSFAS Application Assistance", category:"NSFAS & Bursaries", price:100, stock:999, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Full NSFAS Support"},
-      {name:"Bursary Application Assistance", category:"NSFAS & Bursaries", price:120, stock:999, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Multiple Bursaries"},
-      {name:"Computer Training - Block 1", category:"Computer Training", price:450, stock:50, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Computer Fundamentals"},
-      {name:"Computer Training - Block 2", category:"Computer Training", price:450, stock:50, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Microsoft Word"},
-      {name:"Computer Training - Block 3", category:"Computer Training", price:450, stock:50, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Microsoft Excel"},
-      {name:"Computer Training - Block 4", category:"Computer Training", price:450, stock:50, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Microsoft PowerPoint"},
-      {name:"Computer Training - Block 5", category:"Computer Training", price:450, stock:50, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Microsoft Access"},
-      {name:"Computer Training - Block 6", category:"Computer Training", price:450, stock:50, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Microsoft Publisher"},
-      {name:"Computer Training - Block 7", category:"Computer Training", price:450, stock:50, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Microsoft Outlook"},
-      {name:"Printing - A4 Black & White", category:"Internet Cafe", price:3, stock:9999, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Per Page"},
-      {name:"Printing - A4 Color", category:"Internet Cafe", price:8, stock:9999, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Per Page"},
-      {name:"Typing & CV Writing", category:"Internet Cafe", price:80, stock:999, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Per Document"},
-      {name:"Business Registration - CIPC", category:"Internet Cafe", price:250, stock:999, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Company Registration"},
-      {name:"Branding & Design", category:"Internet Cafe", price:150, stock:999, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Logos, Flyers"},
-      {name:"Door-to-door Services", category:"Internet Cafe", price:50, stock:999, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Delivery Fee"},
-      {name:"Popcorn - Small", category:"Food & Snacks", price:15, stock:200, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Small Tub"},
-      {name:"Popcorn - Large", category:"Food & Snacks", price:25, stock:200, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Large Tub"},
-      {name:"Snacks & Sweets", category:"Food & Snacks", price:10, stock:500, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"Chips, Chocolates"},
-      {name:"Soft Drinks", category:"Food & Snacks", price:12, stock:500, img:"https://i.ibb.co/6cJ3z8pg/IMG-20260617-WA0003.jpg", desc:"330ml Can"}
+      {name:"University Application - 1 Institution", category:"University", price:80, stock:999, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"1 University"},
+      {name:"University Application - Combo 4", category:"University", price:240, stock:999, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"4 Universities"},
+      {name:"TVET College Application - 1 College", category:"TVET College", price:50, stock:999, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"1 TVET College"},
+      {name:"TVET College Application - Combo 4", category:"TVET College", price:175, stock:999, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"4 TVET Colleges"},
+      {name:"NSFAS Application Assistance", category:"NSFAS & Bursaries", price:100, stock:999, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Full NSFAS Support"},
+      {name:"Bursary Application Assistance", category:"NSFAS & Bursaries", price:120, stock:999, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Multiple Bursaries"},
+      {name:"Computer Training - Block 1", category:"Computer Training", price:450, stock:50, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Computer Fundamentals"},
+      {name:"Computer Training - Block 2", category:"Computer Training", price:450, stock:50, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Microsoft Word"},
+      {name:"Computer Training - Block 3", category:"Computer Training", price:450, stock:50, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Microsoft Excel"},
+      {name:"Computer Training - Block 4", category:"Computer Training", price:450, stock:50, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Microsoft PowerPoint"},
+      {name:"Computer Training - Block 5", category:"Computer Training", price:450, stock:50, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Microsoft Access"},
+      {name:"Computer Training - Block 6", category:"Computer Training", price:450, stock:50, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Microsoft Publisher"},
+      {name:"Computer Training - Block 7", category:"Computer Training", price:450, stock:50, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Microsoft Outlook"},
+      {name:"Printing - A4 Black & White", category:"Internet Cafe", price:3, stock:9999, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Per Page"},
+      {name:"Printing - A4 Color", category:"Internet Cafe", price:8, stock:9999, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Per Page"},
+      {name:"Typing & CV Writing", category:"Internet Cafe", price:80, stock:999, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Per Document"},
+      {name:"Business Registration - CIPC", category:"Internet Cafe", price:250, stock:999, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Company Registration"},
+      {name:"Branding & Design", category:"Internet Cafe", price:150, stock:999, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Logos, Flyers"},
+      {name:"Door-to-door Services", category:"Internet Cafe", price:50, stock:999, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Delivery Fee"},
+      {name:"Popcorn - Small", category:"Food & Snacks", price:15, stock:200, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Small Tub"},
+      {name:"Popcorn - Large", category:"Food & Snacks", price:25, stock:200, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Large Tub"},
+      {name:"Snacks & Sweets", category:"Food & Snacks", price:10, stock:500, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Chips, Chocolates"},
+      {name:"Soft Drinks", category:"Food & Snacks", price:12, stock:500, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"330ml Can"}
     ];
     defaultData.forEach(p=>{ let id = Date.now().toString() + Math.random(); set(ref(db, 'kpsbiz/categories/' + id), p); });
     alert('All Default services added to Firebase!')
@@ -590,49 +653,88 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateCart(){
-    cartBar.style.display = cart.length?'block':'none'; clientCartBar.style.display = cart.length?'block':'none';
-    let count = cart.reduce((a,b)=>a+b.qty,0); let total = cart.reduce((a,b)=>a+b.qty*b.price,0);
-    if(cartCount) cartCount.innerText = count; if(clientCartCount) clientCartCount.innerText = count;
-    if(cartTotal) cartTotal.innerText = total; if(clientCartTotal) clientCartTotal.innerText = total;
+    cartBar.style.display = cart.length?'block':'none';
+    clientCartBar.style.display = cart.length?'block':'none';
+    let count = cart.reduce((a,b)=>a+b.qty,0);
+    let total = cart.reduce((a,b)=>a+b.qty*b.price,0);
+    if(cartCount) cartCount.innerText = count;
+    if(clientCartCount) clientCartCount.innerText = count;
+    if(cartTotal) cartTotal.innerText = total;
+    if(clientCartTotal) clientCartTotal.innerText = total;
   }
 
   window.openCustomerModal = () => { if(cart.length === 0) return alert('Cart empty'); document.getElementById('customerModal').style.display = 'flex'; }
   window.sendQuote = () => {
-    let name = document.getElementById('custName').value.trim(); let phone = document.getElementById('custPhone').value.trim(); let email = document.getElementById('custEmail').value.trim();
+    let name = document.getElementById('custName').value.trim();
+    let phone = document.getElementById('custPhone').value.trim();
+    let email = document.getElementById('custEmail').value.trim();
     if(!name ||!phone) return alert('Please enter Name and Phone');
     const orderId = Date.now().toString();
-    const order = { user: isClientMode? name : currentUser.email, customerName: name, customerPhone: phone, customerEmail: email, items: cart, total: cart.reduce((a,b)=>a+b.qty*b.price,0), date: new Date().toISOString(), status: 'Pending' };
+    const order = {
+      user: isClientMode? name : currentUser.email,
+      customerName: name,
+      customerPhone: phone,
+      customerEmail: email,
+      items: cart,
+      total: cart.reduce((a,b)=>a+b.qty*b.price,0),
+      date: new Date().toISOString(),
+      status: 'Pending'
+    };
     set(ref(db, 'kpsbiz/requests/' + orderId), order);
     let msg = `🎓 KPS APPLICATION REQUEST\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\n` + cart.map(i=>`${i.name} x${i.qty} - R${i.price}`).join('\n') + `\nTotal: R${order.total}\n\nReg No: 2025/594397/07`;
     window.open(`https://wa.me/27767021104?text=${encodeURIComponent(msg)}`);
     cart = []; updateCart(); renderProducts(); renderClientProducts();
-    document.getElementById('customerModal').style.display='none'; document.getElementById('custName').value=''; document.getElementById('custPhone').value=''; document.getElementById('custEmail').value='';
+    document.getElementById('customerModal').style.display='none';
+    document.getElementById('custName').value='';
+    document.getElementById('custPhone').value='';
+    document.getElementById('custEmail').value='';
     alert('Request sent! We will contact you shortly.')
   }
 
   window.downloadReport = () => {
-    const doc = new jsPDF(); doc.text("KPS Report", 10, 10);
+    const doc = new jsPDF();
+    doc.text("KPS Report", 10, 10);
     doc.text(`Total Services: ${Object.keys(products).length}`, 10, 20);
     doc.text(`Active Applications: ${Object.values(products).reduce((a,b)=>a+(b.stock||0),0)}`, 10, 30);
     doc.text(`Pending Requests: ${Object.values(orders).filter(o=>o.status=='Pending').length}`, 10, 40);
-    doc.text(`Generated: ${new Date().toLocaleString()}`, 10, 50); doc.save("KPS-Report.pdf");
+    doc.text(`Generated: ${new Date().toLocaleString()}`, 10, 50);
+    doc.save("KPS-Report.pdf");
   }
 
   window.downloadCSV = () => {
     if(Object.keys(orders).length === 0) return alert('No requests to export');
     let csv = 'Request ID,Date,Student Name,Phone,Email,Services,Total R,Status\n';
     Object.entries(orders).forEach(([id,o])=>{
-      let items = o.items.map(i=>`${i.name} x${i.qty}`).join('; '); let date = new Date(o.date).toLocaleDateString();
+      let items = o.items.map(i=>`${i.name} x${i.qty}`).join('; ');
+      let date = new Date(o.date).toLocaleDateString();
       csv += `"${id.slice(-6)}","${date}","${o.customerName||'Guest'}","${o.customerPhone||''}","${o.customerEmail||''}","${items}",${o.total},"${o.status}"\n`;
     });
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob); link.download = `KPS-Requests-${new Date().toISOString().split('T')[0]}.csv`; link.click();
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `KPS-Requests-${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
   }
 
-  function setClientLink(){ let link = window.location.origin + window.location.pathname + '?client=1'; if(document.getElementById('clientShareLink')) document.getElementById('clientShareLink').value = link; }
-  window.copyClientLink = () => { let link = document.getElementById('clientShareLink'); link.select(); document.execCommand('copy'); alert('Client link copied! 📋'); }
-  window.shareClientWhatsApp = () => { let link = document.getElementById('clientShareLink').value; let msg = `🎓 KGOPOTSO PROJECTS & SUPPLIES 🎓\n\nApply to University, TVET & NSFAS online:\n${link}\n\nGET ACCEPTED WITH US!!!`; window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`); }
-  window.toggleDark = () => { document.body.classList.toggle('dark-mode'); localStorage.setItem('darkMode', document.body.classList.contains('dark-mode')); }
+  function setClientLink(){
+    let link = window.location.origin + window.location.pathname + '?client=1';
+    if(document.getElementById('clientShareLink')) document.getElementById('clientShareLink').value = link;
+  }
+  window.copyClientLink = () => {
+    let link = document.getElementById('clientShareLink');
+    link.select();
+    document.execCommand('copy');
+    alert('Client link copied! 📋');
+  }
+  window.shareClientWhatsApp = () => {
+    let link = document.getElementById('clientShareLink').value;
+    let msg = `🎓 KGOPOTSO PROJECTS & SUPPLIES 🎓\n\nApply to University, TVET & NSFAS online:\n${link}\n\nGET ACCEPTED WITH US!!!`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`);
+  }
+  window.toggleDark = () => {
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+  }
   if(localStorage.getItem('darkMode')==='true') document.body.classList.add('dark-mode');
 });
 

@@ -18,12 +18,9 @@ html, body{overflow-x:hidden; width:100%}
 .search-box input{border:none;outline:none;width:100%;background:transparent;color:#000}
 .nav-cats{display:flex;gap:15px;overflow-x:auto;margin-top:10px;padding-bottom:5px;padding-right:15px}
 .nav-cats button{background:rgba(255,255,255,0.2);border:none;color:#fff;padding:6px 12px;border-radius:20px;font-weight:600;cursor:pointer;white-space:nowrap}
-
-/* FIXED: Client nav buttons now black text on white */
 #clientView .nav-cats button{background:#fff!important;color:#2d3436!important;border:1px solid #dfe6e9!important;opacity:1!important;font-weight:600!important;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
 #clientView .nav-cats button:hover{background:var(--accent)!important;color:#fff!important;transform:translateY(-1px)}
 #clientView .nav-cats button.active{background:var(--accent)!important;color:#fff!important;border:1px solid var(--accent)!important;border-bottom:3px solid #000!important;font-weight:800!important;box-shadow:0 2px 6px rgba(211,1,49,0.3)}
-
 .container{max-width:100%;margin:0 auto;padding:10px}
 .banner{background:linear-gradient(135deg,#004080,#d30131);color:#fff;padding:20px;border-radius:15px;text-align:center;margin:15px 0;font-weight:800;font-size:18px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
@@ -109,7 +106,7 @@ input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid var(
     <div class="client-link"><b>📲 Share this with clients:</b><br><code id="clientLink"></code></div>
     <div class="banner">🎓 GET ACCEPTED WITH US!!! 🎓</div>
     <div class="nav-cats">
-      <button onclick="filterCat('All', event)">All</button>
+      <button onclick="filterCat('All', event)" class="active">All</button>
       <button onclick="filterCat('University', event)">University</button>
       <button onclick="filterCat('TVET College', event)">TVET College</button>
       <button onclick="filterCat('NSFAS & Bursaries', event)">NSFAS & Bursaries</button>
@@ -156,7 +153,7 @@ input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid var(
       </div>
     </div>
     <div class="nav-cats">
-      <button onclick="filterCat('All', event)">All</button>
+      <button onclick="filterCat('All', event)" class="active">All</button>
       <button onclick="filterCat('University', event)">University</button>
       <button onclick="filterCat('TVET College', event)">TVET College</button>
       <button onclick="filterCat('NSFAS & Bursaries', event)">NSFAS & Bursaries</button>
@@ -267,7 +264,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const productsRef = ref(db, 'kpsbiz/categories');
   const ordersRef = ref(db, 'kpsbiz/requests');
   let products = {}; let orders = {}; let cart = [];
-  let currentUser = {role:'reception'}; let currentFilter = 'All'; let editingId = null; let deferredPrompt; let currentInvoiceId = null;
+  let currentUser = {role:'reception'}; let currentFilter = 'All'; let editingId = null; let deferredPrompt; let currentInvoiceId = null; let unsub1=null, unsub2=null;
+
+  const safe = (fn,n)=>{return(...a)=>{try{return fn(...a)}catch(e){console.error(n,e);alert('Error: '+e.message)}}};
 
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
@@ -321,7 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const loginError = document.getElementById('loginError');
 
   if(adminSearch) adminSearch.addEventListener('keyup', buildProductList);
-  window.doLogin = async () => {
+  window.doLogin = safe(async () => {
     loginError.innerText = 'Logging in...';
     try{
       await signInWithEmailAndPassword(auth, loginEmail.value, loginPass.value);
@@ -329,10 +328,10 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch(e){
       loginError.innerText = 'Login failed: ' + e.message
     }
-  }
-  window.logout = () => { signOut(auth) }
+  },'login')
+  window.logout = safe(() => { if(unsub1)unsub1(); if(unsub2)unsub2(); signOut(auth) },'logout')
 
-  onAuthStateChanged(auth, async user => {
+  onAuthStateChanged(auth, safe(async user => {
     if(isClientMode) return;
     if(user){
       let role = 'reception';
@@ -343,9 +342,11 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('userRole').innerText = currentUser.role.toUpperCase();
       document.getElementById('userRole').className = 'role-badge role-' + currentUser.role;
       if(currentUser.role == 'reception') document.getElementById('usersTab').style.display = 'none';
-      buildProductList(); buildStockList(); buildOrders(); updateDashboard(); setClientLink();
-    } else { loginScreen.style.display = 'block'; appDiv.style.display = 'none'; }
-  })
+      unsub1 = onValue(productsRef, snap => { products = snap.val() || {}; renderProducts(); renderClientProducts(); buildProductList(); buildStockList(); updateDashboard(); })
+      unsub2 = onValue(ordersRef, snap => { orders = snap.val() || {}; buildOrders(); updateDashboard(); })
+      setClientLink();
+    } else { loginScreen.style.display = 'block'; appDiv.style.display = 'none'; if(unsub1)unsub1(); if(unsub2)unsub2(); }
+  },'auth'))
 
   window.showTab = (tab, el) => {
     document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
@@ -355,22 +356,24 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   }
 
-  onValue(productsRef, snap => { products = snap.val() || {}; renderProducts(); renderClientProducts(); buildProductList(); buildStockList(); updateDashboard(); })
-  onValue(ordersRef, snap => { orders = snap.val() || {}; buildOrders(); updateDashboard(); })
-
   function updateDashboard(){
-    document.getElementById('statProducts').innerText = Object.keys(products).length;
-    document.getElementById('statStock').innerText = Object.values(products).reduce((a,b)=>a+(b.stock||0),0);
-    document.getElementById('statOrders').innerText = Object.values(orders).filter(o=>o.status=='Pending').length;
+    document.getElementById('statProducts').innerText = Object.keys(products||{}).length;
+    document.getElementById('statStock').innerText = Object.values(products||{}).reduce((a,b)=>a+(+b.stock||0),0);
+    document.getElementById('statOrders').innerText = Object.values(orders||{}).filter(o=>o.status=='Pending').length;
     lowStockList.innerHTML = '';
-    Object.entries(products).filter(([id,p])=>p.stock < 10).forEach(([id,p])=>{
+    Object.entries(products||{}).filter(([id,p])=>+p.stock < 10).forEach(([id,p])=>{
       lowStockList.innerHTML += `<div style="padding:8px;background:#ffe6e6;border-radius:8px;margin:5px 0"><b>${p.name}</b> - <span style="color:var(--danger);font-weight:700">Only ${p.stock} slots left!</span></div>`
     })
     if(lowStockList.innerHTML=='') lowStockList.innerHTML = '<p style="color:var(--green)">All service capacity good ✅</p>'
   }
 
-  function getImages(p){ if(!p.img) return ['https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg']; return p.img.split(',').map(s=>s.trim()).filter(s=>s); }
-  window.switchImage = (cardId, imgUrl, thumb) => { document.getElementById('main_'+cardId).src = imgUrl; document.querySelectorAll(`#card_${cardId} .card-imgs img`).forEach(i=>i.classList.remove('active')); thumb.classList.add('active'); }
+  function getImages(p){ if(!p||!p.img) return ['https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg']; return p.img.split(',').map(s=>s.trim()).filter(s=>s); }
+  window.switchImage = safe((cardId, imgUrl, thumb) => {
+    const img = document.getElementById('main_'+cardId);
+    if(img) img.src = imgUrl;
+    document.querySelectorAll(`#card_${cardId}.card-imgs img`).forEach(i=>i.classList.remove('active'));
+    if(thumb) thumb.classList.add('active');
+  },'switchImage')
 
   function getCartControls(id){
     let item = cart.find(x=>x.id==id);
@@ -378,10 +381,28 @@ document.addEventListener('DOMContentLoaded', () => {
     return `<div class="qty-controls"><button class="qty-btn" onclick="decreaseQty('${id}')">-</button><div class="qty-text">${item.qty}</div><button class="qty-btn" onclick="addToCart('${id}')">+</button></div>`;
   }
 
+  function renderProducts(){
+    if(isClientMode) return;
+    productGrid.innerHTML = '';
+    if(!products || Object.keys(products).length === 0){ productGrid.innerHTML = `<p style="text-align:center;grid-column:1/-1">No services yet. Click "Add Default Services"</p>`; return; }
+    Object.entries(products).filter(([id,p])=>{
+      let matchCat = currentFilter == 'All' || p.category == currentFilter;
+      let matchSearch = p.name.toLowerCase().includes(searchInput.value.toLowerCase());
+      return matchCat && matchSearch;
+    }).forEach(([id,p])=>{
+      let imgs = getImages(p);
+      let mainImg = imgs[0];
+      let extraImgs = imgs.map((u,i)=>`<img src="${u}" class="${i==0?'active':''}" onclick="switchImage('${id}','${u}',this)" onerror="this.style.display='none'">`).join('');
+      let brands = p.desc? p.desc.split(',').map(b=>`<span class="brand-tag">${b}</span>`).join('') : '';
+      let cartBtn = +p.stock > 0? getCartControls(id) : `<button class="btn-oos" disabled>Fully Booked</button>`;
+      productGrid.innerHTML += `<div class="card" id="card_${id}"><img id="main_${id}" src="${mainImg}" loading="lazy" onerror="this.src='https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg'"><div class="card-imgs">${extraImgs}</div><h4>${p.name}</h4>${brands}<div class="price">R${+p.price||0} ${+p.oldPrice? `<span class="old-price">R${+p.oldPrice}</span>`:''}</div><div class="stock ${+p.stock<10?'stock-low':''}">Capacity: ${+p.stock||0}</div>${cartBtn}</div>`;
+    })
+  }
+
  function renderClientProducts(){
     if(!isClientMode) return;
     clientProductGrid.innerHTML = '';
-    if(Object.keys(products).length === 0){ clientProductGrid.innerHTML = `<p style="text-align:center;grid-column:1/-1">No services yet</p>`; return; }
+    if(!products || Object.keys(products).length === 0){ clientProductGrid.innerHTML = `<p style="text-align:center;grid-column:1/-1">No services yet</p>`; return; }
     Object.entries(products).filter(([id,p])=>{
       let matchCat = currentFilter == 'All' || p.category == currentFilter;
       let matchSearch = p.name.toLowerCase().includes(clientSearchInput.value.toLowerCase());
@@ -391,28 +412,28 @@ document.addEventListener('DOMContentLoaded', () => {
       let mainImg = imgs[0];
       let extraImgs = imgs.map((u,i)=>`<img src="${u}" class="${i==0?'active':''}" onclick="switchImage('${id}','${u}',this)" onerror="this.style.display='none'">`).join('');
       let brands = p.desc? p.desc.split(',').map(b=>`<span class="brand-tag">${b}</span>`).join('') : '';
-      let cartBtn = p.stock > 0? getCartControls(id) : `<button class="btn-oos" disabled>Fully Booked</button>`;
-      clientProductGrid.innerHTML += `<div class="card" id="card_${id}"><img id="main_${id}" src="${mainImg}" loading="lazy" onerror="this.onerror=null;this.src='https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg'"><div class="card-imgs">${extraImgs}</div><h4>${p.name}</h4>${brands}<div class="price">R${p.price} ${p.oldPrice? `<span class="old-price">R${p.oldPrice}</span>`:''}</div>${cartBtn}</div>`;
+      let cartBtn = +p.stock > 0? getCartControls(id) : `<button class="btn-oos" disabled>Fully Booked</button>`;
+      clientProductGrid.innerHTML += `<div class="card" id="card_${id}"><img id="main_${id}" src="${mainImg}" loading="lazy" onerror="this.onerror=null;this.src='https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg'"><div class="card-imgs">${extraImgs}</div><h4>${p.name}</h4>${brands}<div class="price">R${+p.price||0} ${+p.oldPrice? `<span class="old-price">R${+p.oldPrice}</span>`:''}</div>${cartBtn}</div>`;
     })
   }
 
   window.searchProducts = () => { renderProducts(); renderClientProducts(); }
-  window.filterCat = (cat, e) => {
+  window.filterCat = safe((cat, e) => {
     currentFilter=cat;
     renderProducts();
     renderClientProducts();
     document.querySelectorAll('.nav-cats button').forEach(b=>b.classList.remove('active'));
     if(e) e.target.classList.add('active');
-  }
+  },'filterCat')
 
   function buildProductList(){
     if(currentUser.role == 'reception') return;
     productList.innerHTML = '';
     let searchTerm = adminSearch.value.toLowerCase();
-    Object.entries(products).filter(([id,p])=>{
+    Object.entries(products||{}).filter(([id,p])=>{
       return p.name.toLowerCase().includes(searchTerm) || p.category.toLowerCase().includes(searchTerm)
     }).forEach(([id,p])=>{
-      productList.innerHTML += `<div style="padding:10px;border:1px solid var(--border);border-radius:8px;margin:5px 0;background:#fafafa"><b>${p.name}</b> - R${p.price} - Capacity: ${p.stock} - <small>${p.category}</small><div style="float:right;gap:5px;display:flex"><button onclick="editProduct('${id}')" class="btn-blue" style="padding:5px 10px;font-size:12px">Edit</button>${currentUser.role== 'ceo'? `<button onclick="deleteProduct('${id}')" class="btn-danger" style="padding:5px 10px;font-size:12px">Del</button>` : ''}</div></div>`;
+      productList.innerHTML += `<div style="padding:10px;border:1px solid var(--border);border-radius:8px;margin:5px 0;background:#fafafa"><b>${p.name}</b> - R${+p.price||0} - Capacity: ${+p.stock||0} - <small>${p.category}</small><div style="float:right;gap:5px;display:flex"><button onclick="editProduct('${id}')" class="btn-blue" style="padding:5px 10px;font-size:12px">Edit</button>${currentUser.role== 'ceo'? `<button onclick="deleteProduct('${id}')" class="btn-danger" style="padding:5px 10px;font-size:12px">Del</button>` : ''}</div></div>`;
     })
     if(productList.innerHTML === '') productList.innerHTML = '<p style="text-align:center;color:var(--muted)">No services found</p>'
   }
@@ -420,15 +441,15 @@ document.addEventListener('DOMContentLoaded', () => {
   function buildOrders(){
     if(currentUser.role == 'reception') return;
     ordersList.innerHTML = '';
-    if(Object.keys(orders).length === 0){ ordersList.innerHTML = '<p>No requests yet</p>'; return; }
+    if(!orders || Object.keys(orders).length === 0){ ordersList.innerHTML = '<p>No requests yet</p>'; return; }
     Object.entries(orders).reverse().forEach(([id,o])=>{
       let statusColor = o.status=='Completed'? 'var(--green)' : 'var(--accent)';
       ordersList.innerHTML += `
       <div class="order-card">
-        <b>Request #${id.slice(-6)}</b> - R${o.total} - <span style="color:${statusColor};font-weight:700">${o.status}</span><br>
+        <b>Request #${id.slice(-6)}</b> - R${+o.total||0} - <span style="color:${statusColor};font-weight:700">${o.status}</span><br>
         <small>${new Date(o.date).toLocaleString()}</small><br>
         <small><b>Student:</b> ${o.customerName || 'Guest'} | ${o.customerPhone || o.user} | ${o.customerEmail || ''}</small><br>
-        <small>${o.items.map(i=>`${i.name} x${i.qty}`).join(', ')}</small><br>
+        <small>${(o.items||[]).map(i=>`${i.name} x${i.qty}`).join(', ')}</small><br>
         <div style="display:flex;gap:5px;margin-top:8px;flex-wrap:wrap">
           <button class="btn-blue" onclick="openInvoiceModal('${id}')">📄 Invoice</button>
           <button class="btn-green" onclick="updateOrderStatus('${id}','Completed')">Mark Complete</button>
@@ -439,27 +460,27 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   }
 
-  window.updateOrderStatus = (id, status) => { set(ref(db, 'kpsbiz/requests/' + id + '/status'), status); }
-  window.deleteOrder = (id) => { if(currentUser.role!= 'ceo' && currentUser.role!= 'manager') return alert('No permission'); if(confirm('Delete this request?')) remove(ref(db, 'kpsbiz/requests/' + id)) }
+  window.updateOrderStatus = safe((id, status) => { set(ref(db, 'kpsbiz/requests/' + id + '/status'), status); },'updateOrderStatus')
+  window.deleteOrder = safe((id) => { if(currentUser.role!= 'ceo' && currentUser.role!= 'manager') return alert('No permission'); if(confirm('Delete this request?')) remove(ref(db, 'kpsbiz/requests/' + id)) },'deleteOrder')
 
-  window.openInvoiceModal = (id) => {
-    currentInvoiceId = id; let o = orders[id];
+  window.openInvoiceModal = safe((id) => {
+    currentInvoiceId = id; let o = orders[id]||{};
     document.getElementById('invCustName').value = o.customerName || '';
     document.getElementById('invCustPhone').value = o.customerPhone || '';
     document.getElementById('invCustEmail').value = o.customerEmail || '';
     document.getElementById('invCustAddress').value = o.customerAddress || '';
     document.getElementById('invoiceModal').style.display = 'flex';
-  }
+  },'openInvoiceModal')
 
-  window.downloadFinalInvoice = () => {
-    let o = orders[currentInvoiceId];
+  window.downloadFinalInvoice = safe(() => {
+    let o = orders[currentInvoiceId]||{};
     let custName = document.getElementById('invCustName').value || o.customerName || 'Guest';
     let custPhone = document.getElementById('invCustPhone').value || o.customerPhone || '';
     let custEmail = document.getElementById('invCustEmail').value || o.customerEmail || '';
     let custAddress = document.getElementById('invCustAddress').value || '';
     let addTax = document.getElementById('invTaxToggle').checked;
     let isPaid = document.getElementById('invPaidToggle').checked;
-    let subtotal = o.total;
+    let subtotal = +o.total||0;
     let tax = addTax? subtotal * 0.15 : 0;
     let grandTotal = subtotal + tax;
     const doc = new jsPDF();
@@ -478,7 +499,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let y = 90; doc.setFontSize(10); doc.setFont(undefined, 'bold');
     doc.text("Service", 10, y); doc.text("Qty", 120, y); doc.text("Rate", 145, y); doc.text("Amount", 175, y);
     y += 5; doc.line(10, y, 200, y); y += 7; doc.setFont(undefined, 'normal');
-    o.items.forEach(i=>{ doc.text(i.name.substring(0,35), 10, y); doc.text(i.qty.toString(), 120, y); doc.text(`R${i.price}`, 145, y); doc.text(`R${i.price*i.qty}`, 175, y); y += 7; });
+    (o.items||[]).forEach(i=>{ doc.text(i.name.substring(0,35), 10, y); doc.text(i.qty.toString(), 120, y); doc.text(`R${+i.price||0}`, 145, y); doc.text(`R${(+i.price||0)*i.qty}`, 175, y); y += 7; });
     y += 5; doc.line(120, y, 200, y); y += 7; doc.text("Subtotal:", 145, y); doc.text(`R${subtotal.toFixed(2)}`, 175, y); y += 7;
     if(addTax){ doc.text("VAT 15%:", 145, y); doc.text(`R${tax.toFixed(2)}`, 175, y); y += 7; }
     doc.setFont(undefined, 'bold'); doc.setFontSize(12); doc.text("TOTAL:", 145, y); doc.text(`R${grandTotal.toFixed(2)}`, 175, y);
@@ -486,9 +507,9 @@ document.addEventListener('DOMContentLoaded', () => {
     doc.setFontSize(8); doc.setFont(undefined, 'normal'); doc.text("Thank you for choosing KPS - We help you take the right step towards your future!", 105, 280, {align: "center"});
     doc.save(`KPS-Invoice-${currentInvoiceId.slice(-6)}.pdf`);
     document.getElementById('invoiceModal').style.display='none';
-  }
+  },'downloadFinalInvoice')
 
-  window.downloadQuickInvoice = () => {
+  window.downloadQuickInvoice = safe(() => {
     let name = document.getElementById('quickInvName').value;
     let phone = document.getElementById('quickInvPhone').value;
     let email = document.getElementById('quickInvEmail').value;
@@ -521,7 +542,7 @@ document.addEventListener('DOMContentLoaded', () => {
       status: isPaid? 'Completed' : 'Pending',
       type: 'Walk-In Invoice'
     };
-    set(ref(db, 'kpsbiz/requests/' + orderId), order);
+    set(ref(db, 'kpsbiz/requests/' + orderId), order).catch(e=>alert('Save failed: '+e.message));
 
     const doc = new jsPDF();
     doc.addImage('https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg', 'JPEG', 10, 10, 25, 25);
@@ -544,25 +565,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('quickInvoiceModal').style.display='none';
     alert('✅ Walk-In Invoice saved! It will now appear in Requests + CSV');
-  }
+  },'downloadQuickInvoice')
 
-  window.editProduct = (id) => {
+  window.editProduct = safe((id) => {
     if(currentUser.role == 'reception') return alert('No permission');
-    let p = products[id];
+    let p = products[id]||{};
     editingId = id;
-    pName.value = p.name;
-    pCat.value = p.category;
-    pImg.value = p.img;
-    pPrice.value = p.price;
-    pOldPrice.value = p.oldPrice;
-    pStock.value = p.stock;
-    pDesc.value = p.desc;
+    pName.value = p.name||'';
+    pCat.value = p.category||'University';
+    pImg.value = p.img||'';
+    pPrice.value = +p.price||0;
+    pOldPrice.value = +p.oldPrice||0;
+    pStock.value = +p.stock||0;
+    pDesc.value = p.desc||'';
     formTitle.innerText = "✏️ Editing: " + p.name;
     saveBtn.innerText = "Update Service";
     saveBtn.style.background = "var(--blue)";
     cancelBtn.style.display = "block";
     document.getElementById('tab-products').scrollIntoView();
-  }
+  },'editProduct')
   window.cancelEdit = () => {
     editingId = null;
     [pName,pImg,pPrice,pOldPrice,pStock,pDesc].forEach(i=>i.value='');
@@ -571,7 +592,7 @@ document.addEventListener('DOMContentLoaded', () => {
     saveBtn.style.background = "var(--accent)";
     cancelBtn.style.display = "none";
   }
-  window.saveProduct = () => {
+  window.saveProduct = safe(() => {
     if(currentUser.role == 'reception') return alert('No permission');
     let productData = {
       name: pName.value.trim(),
@@ -595,16 +616,16 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Service Added!');
       }).catch(err=> alert('Error: ' + err.message));
     }
-  }
+  },'saveProduct')
 
   function buildStockList(){
     stockList.innerHTML = '';
-    Object.entries(products).forEach(([id,p])=>{
-      stockList.innerHTML += `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px;border:1px solid var(--border);border-radius:8px;margin:5px 0"><div><b>${p.name}</b><br><small class="${p.stock<10?'stock-low':''}">Capacity: ${p.stock}</small></div><div><input type="number" id="stock_${id}" value="0" style="width:80px"><button class="btn-green" onclick="updateStock('${id}')">+ Add</button></div></div>`;
+    Object.entries(products||{}).forEach(([id,p])=>{
+      stockList.innerHTML += `<div style="display:flex;justify-content:space-between;align-items:center;padding:8px;border:1px solid var(--border);border-radius:8px;margin:5px 0"><div><b>${p.name}</b><br><small class="${+p.stock<10?'stock-low':''}">Capacity: ${+p.stock||0}</small></div><div><input type="number" id="stock_${id}" value="0" style="width:80px"><button class="btn-green" onclick="updateStock('${id}')">+ Add</button></div></div>`;
     })
   }
 
-  window.seedDatabase = () => {
+  window.seedDatabase = safe(() => {
     if(currentUser.role!= 'ceo' && currentUser.role!= 'manager') return alert('No permission');
     const defaultData = [
       {name:"University Application - 1 Institution", category:"University", price:80, stock:999, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"1 University"},
@@ -614,32 +635,19 @@ document.addEventListener('DOMContentLoaded', () => {
       {name:"NSFAS Application Assistance", category:"NSFAS & Bursaries", price:100, stock:999, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Full NSFAS Support"},
       {name:"Bursary Application Assistance", category:"NSFAS & Bursaries", price:120, stock:999, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Multiple Bursaries"},
       {name:"Computer Training - Block 1", category:"Computer Training", price:450, stock:50, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Computer Fundamentals"},
-      {name:"Computer Training - Block 2", category:"Computer Training", price:450, stock:50, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Microsoft Word"},
-      {name:"Computer Training - Block 3", category:"Computer Training", price:450, stock:50, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Microsoft Excel"},
-      {name:"Computer Training - Block 4", category:"Computer Training", price:450, stock:50, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Microsoft PowerPoint"},
-      {name:"Computer Training - Block 5", category:"Computer Training", price:450, stock:50, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Microsoft Access"},
-      {name:"Computer Training - Block 6", category:"Computer Training", price:450, stock:50, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Microsoft Publisher"},
-      {name:"Computer Training - Block 7", category:"Computer Training", price:450, stock:50, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Microsoft Outlook"},
       {name:"Printing - A4 Black & White", category:"Internet Cafe", price:3, stock:9999, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Per Page"},
-      {name:"Printing - A4 Color", category:"Internet Cafe", price:8, stock:9999, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Per Page"},
       {name:"Typing & CV Writing", category:"Internet Cafe", price:80, stock:999, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Per Document"},
-      {name:"Business Registration - CIPC", category:"Internet Cafe", price:250, stock:999, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Company Registration"},
-      {name:"Branding & Design", category:"Internet Cafe", price:150, stock:999, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Logos, Flyers"},
-      {name:"Door-to-door Services", category:"Internet Cafe", price:50, stock:999, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Delivery Fee"},
-      {name:"Popcorn - Small", category:"Food & Snacks", price:15, stock:200, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Small Tub"},
-      {name:"Popcorn - Large", category:"Food & Snacks", price:25, stock:200, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Large Tub"},
-      {name:"Snacks & Sweets", category:"Food & Snacks", price:10, stock:500, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Chips, Chocolates"},
-      {name:"Soft Drinks", category:"Food & Snacks", price:12, stock:500, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"330ml Can"}
+      {name:"Popcorn - Small", category:"Food & Snacks", price:15, stock:200, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Small Tub"}
     ];
     defaultData.forEach(p=>{ let id = Date.now().toString() + Math.random(); set(ref(db, 'kpsbiz/categories/' + id), p); });
     alert('All Default services added to Firebase!')
-  }
+  },'seedDatabase')
 
-  window.deleteProduct = (id) => { if(currentUser.role!= 'ceo') return alert('CEO only'); if(confirm('Delete this service?')) remove(ref(db, 'kpsbiz/categories/' + id)) }
-  window.updateStock = (id) => { let add = parseInt(document.getElementById('stock_'+id).value); set(ref(db, 'kpsbiz/categories/' + id + '/stock'), (products[id].stock||0) + add); document.getElementById('stock_'+id).value = 0; }
+  window.deleteProduct = safe((id) => { if(currentUser.role!= 'ceo') return alert('CEO only'); if(confirm('Delete this service?')) remove(ref(db, 'kpsbiz/categories/' + id)) },'deleteProduct')
+  window.updateStock = safe((id) => { let add = parseInt(document.getElementById('stock_'+id).value)||0; set(ref(db, 'kpsbiz/categories/' + id + '/stock'), (+products[id].stock||0) + add); document.getElementById('stock_'+id).value = 0; },'updateStock')
 
-  window.addToCart = (id) => { let p = products[id]; let item = cart.find(x=>x.id==id); if(item){ item.qty++ } else { cart.push({id,name:p.name,price:p.price,qty:1,category:p.category}) } updateCart(); renderProducts(); renderClientProducts(); }
-  window.decreaseQty = (id) => {
+  window.addToCart = safe((id) => { let p = products[id]; if(!p) return; let item = cart.find(x=>x.id==id); if(item){ item.qty++ } else { cart.push({id,name:p.name,price:+p.price||0,qty:1,category:p.category}) } updateCart(); renderProducts(); renderClientProducts(); },'addToCart')
+  window.decreaseQty = safe((id) => {
     let item = cart.find(x=>x.id==id);
     if(item){
       item.qty--;
@@ -650,13 +658,13 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCart();
     renderProducts();
     renderClientProducts();
-  }
+  },'decreaseQty')
 
   function updateCart(){
     cartBar.style.display = cart.length?'block':'none';
     clientCartBar.style.display = cart.length?'block':'none';
-    let count = cart.reduce((a,b)=>a+b.qty,0);
-    let total = cart.reduce((a,b)=>a+b.qty*b.price,0);
+    let count = cart.reduce((a,b)=>a+(b.qty||0),0);
+    let total = cart.reduce((a,b)=>a+(b.qty||0)*(+b.price||0),0);
     if(cartCount) cartCount.innerText = count;
     if(clientCartCount) clientCartCount.innerText = count;
     if(cartTotal) cartTotal.innerText = total;
@@ -664,7 +672,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   window.openCustomerModal = () => { if(cart.length === 0) return alert('Cart empty'); document.getElementById('customerModal').style.display = 'flex'; }
-  window.sendQuote = () => {
+  window.sendQuote = safe(() => {
     let name = document.getElementById('custName').value.trim();
     let phone = document.getElementById('custPhone').value.trim();
     let email = document.getElementById('custEmail').value.trim();
@@ -676,45 +684,46 @@ document.addEventListener('DOMContentLoaded', () => {
       customerPhone: phone,
       customerEmail: email,
       items: cart,
-      total: cart.reduce((a,b)=>a+b.qty*b.price,0),
+      total: cart.reduce((a,b)=>a+(b.qty||0)*(+b.price||0),0),
       date: new Date().toISOString(),
       status: 'Pending'
     };
-    set(ref(db, 'kpsbiz/requests/' + orderId), order);
-    let msg = `🎓 KPS APPLICATION REQUEST\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\n` + cart.map(i=>`${i.name} x${i.qty} - R${i.price}`).join('\n') + `\nTotal: R${order.total}\n\nReg No: 2025/594397/07`;
-    window.open(`https://wa.me/27767021104?text=${encodeURIComponent(msg)}`);
-    cart = []; updateCart(); renderProducts(); renderClientProducts();
-    document.getElementById('customerModal').style.display='none';
-    document.getElementById('custName').value='';
-    document.getElementById('custPhone').value='';
-    document.getElementById('custEmail').value='';
-    alert('Request sent! We will contact you shortly.')
-  }
+    set(ref(db, 'kpsbiz/requests/' + orderId), order).then(()=>{
+      let msg = `🎓 KPS APPLICATION REQUEST\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\n` + cart.map(i=>`${i.name} x${i.qty} - R${i.price}`).join('\n') + `\nTotal: R${order.total}\n\nReg No: 2025/594397/07`;
+      window.open(`https://wa.me/27767021104?text=${encodeURIComponent(msg)}`);
+      cart = []; updateCart(); renderProducts(); renderClientProducts();
+      document.getElementById('customerModal').style.display='none';
+      document.getElementById('custName').value='';
+      document.getElementById('custPhone').value='';
+      document.getElementById('custEmail').value='';
+      alert('Request sent! We will contact you shortly.')
+    }).catch(e=>alert('Send failed: '+e.message))
+  },'sendQuote')
 
-  window.downloadReport = () => {
+  window.downloadReport = safe(() => {
     const doc = new jsPDF();
     doc.text("KPS Report", 10, 10);
-    doc.text(`Total Services: ${Object.keys(products).length}`, 10, 20);
-    doc.text(`Active Applications: ${Object.values(products).reduce((a,b)=>a+(b.stock||0),0)}`, 10, 30);
-    doc.text(`Pending Requests: ${Object.values(orders).filter(o=>o.status=='Pending').length}`, 10, 40);
+    doc.text(`Total Services: ${Object.keys(products||{}).length}`, 10, 20);
+    doc.text(`Active Applications: ${Object.values(products||{}).reduce((a,b)=>a+(+b.stock||0),0)}`, 10, 30);
+    doc.text(`Pending Requests: ${Object.values(orders||{}).filter(o=>o.status=='Pending').length}`, 10, 40);
     doc.text(`Generated: ${new Date().toLocaleString()}`, 10, 50);
     doc.save("KPS-Report.pdf");
-  }
+  },'downloadReport')
 
-  window.downloadCSV = () => {
-    if(Object.keys(orders).length === 0) return alert('No requests to export');
+  window.downloadCSV = safe(() => {
+    if(!orders || Object.keys(orders).length === 0) return alert('No requests to export');
     let csv = 'Request ID,Date,Student Name,Phone,Email,Services,Total R,Status\n';
     Object.entries(orders).forEach(([id,o])=>{
-      let items = o.items.map(i=>`${i.name} x${i.qty}`).join('; ');
+      let items = (o.items||[]).map(i=>`${i.name} x${i.qty}`).join('; ');
       let date = new Date(o.date).toLocaleDateString();
-      csv += `"${id.slice(-6)}","${date}","${o.customerName||'Guest'}","${o.customerPhone||''}","${o.customerEmail||''}","${items}",${o.total},"${o.status}"\n`;
+      csv += `"${id.slice(-6)}","${date}","${o.customerName||'Guest'}","${o.customerPhone||''}","${o.customerEmail||''}","${items}",${+o.total||0},"${o.status}"\n`;
     });
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = `KPS-Requests-${new Date().toISOString().split('T')[0]}.csv`;
     link.click();
-  }
+  },'downloadCSV')
 
   function setClientLink(){
     let link = window.location.origin + window.location.pathname + '?client=1';

@@ -370,7 +370,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function getImages(p){ if(!p||!p.img) return ['https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg']; return p.img.split(',').map(s=>s.trim()).filter(s=>s); }
-  window.switchImage = safe((cardId, imgUrl, thumb) => { const img = document.getElementById('main_'+cardId); if(img) img.src = imgUrl; document.querySelectorAll(`#card_${cardId}.card-imgs img`).forEach(i=>i.classList.remove('active')); if(thumb) thumb.classList.add('active'); },'switchImage')
+  window.switchImage = safe((cardId, imgUrl, thumb) => { const img = document.getElementById('main_'+cardId); if(img) img.src = imgUrl; document.querySelectorAll(`#card_${cardId} .card-imgs img`).forEach(i=>i.classList.remove('active')); if(thumb) thumb.classList.add('active'); },'switchImage')
 
   function getCartControls(id){
     let item = cart.find(x=>x.id==id);

@@ -113,7 +113,6 @@ input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid var(
       <button onclick="filterCat('Computer Training', event)">Computer Training</button>
       <button onclick="filterCat('Internet Cafe', event)">Internet Cafe</button>
       <button onclick="filterCat('Food & Snacks', event)">Food & Snacks</button>
-      <button onclick="filterCat('Cleaning', event)">Cleaning</button>
     </div>
     <h2 style="margin:20px 0">📋 Our Services</h2>
     <div class="grid" id="clientProductGrid"><div class="loading">Loading services...</div></div>
@@ -161,7 +160,6 @@ input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid var(
       <button onclick="filterCat('Computer Training', event)">Computer Training</button>
       <button onclick="filterCat('Internet Cafe', event)">Internet Cafe</button>
       <button onclick="filterCat('Food & Snacks', event)">Food & Snacks</button>
-      <button onclick="filterCat('Cleaning', event)">Cleaning</button>
     </div>
   </div>
   <div class="container">
@@ -201,7 +199,7 @@ input,select,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid var(
         <input type="text" id="pName" placeholder="Service Name">
         <select id="pCat">
           <option>University</option><option>TVET College</option><option>NSFAS & Bursaries</option>
-          <option>Computer Training</option><option>Internet Cafe</option><option>Food & Snacks</option><option>Cleaning</option>
+          <option>Computer Training</option><option>Internet Cafe</option><option>Food & Snacks</option>
         </select>
         <input type="text" id="pImg" placeholder="Image URL 1, Image URL 2">
         <input type="number" id="pPrice" placeholder="Price R">
@@ -633,12 +631,10 @@ document.addEventListener('DOMContentLoaded', () => {
       {name:"NSFAS Application Assistance", category:"NSFAS & Bursaries", price:100, stock:999, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Full NSFAS Support"},
       {name:"Computer Training - Block 1", category:"Computer Training", price:450, stock:50, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Computer Fundamentals"},
       {name:"Printing - A4 Black & White", category:"Internet Cafe", price:3, stock:9999, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Per Page"},
-      {name:"Popcorn - Small", category:"Food & Snacks", price:15, stock:200, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Small Tub"},
-      {name:"Office Cleaning", category:"Cleaning", price:350, stock:50, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Per Office"},
-      {name:"House Cleaning", category:"Cleaning", price:450, stock:50, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Per House"}
+      {name:"Popcorn - Small", category:"Food & Snacks", price:15, stock:200, img:"https://i.ibb.co/5gyYzRC3/Screenshot-20260803-181928-com-whatsapp-w4b-edit-97786639672642.jpg", desc:"Small Tub"}
     ];
     defaultData.forEach(p=>{ let id = Date.now().toString() + Math.random(); set(ref(db, 'kpsbiz/categories/' + id), p); });
-    alert('✅ All Default services added to Firebase including Cleaning!')
+    alert('✅ All Default services added to Firebase!')
   },'seedDatabase')
 
   window.deleteProduct = safe((id) => { if(currentUser.role!= 'ceo') return alert('CEO only'); if(confirm('Delete this service?')) remove(ref(db, 'kpsbiz/categories/' + id)).catch(e=>alert(e.message)) },'deleteProduct')
